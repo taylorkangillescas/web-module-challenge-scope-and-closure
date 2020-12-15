@@ -111,8 +111,10 @@ Use the getInningScore() function below to do the following:
   1. Receive a callback function - you will pass in the inning function from task 2 as your argument 
   2. Return an object with a score for home and a score for away that populates from invoking the inning callback function */
 
-function getInningScore(callback) {
-  /*Your Code Here */
+function getInningScore(inningFunction) {
+  let homeScore = inningFunction();
+  let awayScore = inningFunction();
+  return {Home: homeScore, Away: awayScore}
 }
 
 
@@ -157,27 +159,30 @@ Use the scoreboard function below to do the following:
 ]  
   */
 
-function scoreboard(callback, numInnings) {
-  let inningScores = [0,0];
-  for (let i=1; i<numInnings; i++){
-    let score1 = (inningScores[0]+=callback());
-    let score2 = (inningScores[1]+=callback());
-    if (scoreboard[i]===1){
-      inningScores.push(`${[i]}st inning: ${score1} - ${score2}`)
-    }
-    if (scoreboard[i]===2){
-      inningScores.push(`${[i]}nd inning: ${score1} - ${score2}`)
-    }
-    if (scoreboard[i]===3){
-      inningScores.push(`${[i]}rd inning: ${score1} - ${score2}`)
-    }
-    else{
-      inningScores.push(`${[i]}th inning: ${score1} - ${score2}`)
-    }
-  } 
-  return inningScores
+function scoreboard(functionOne, functionTwo, number){
+  const totalScore = [];
+  let home = 0;
+  let away = 0;
+  let inningNum = 0;
+  for(let i=0; i<number; i++){
+    let inningScore = functionOne(functionTwo);
+    home = home + inningScore.Home;
+    away = away + inningScore.Away;
+    inningNum++;
+    totalScore.push(`Inning ${inningNum}: Away ${away} - Home ${home}`);
+  }
+  if(home === away){
+    totalScore.push(`This game will require extra innings: Away ${away} - Home ${home}`);
+  }
+  else{
+    totalScore.push(`Final Score: Away ${away} - Home ${home}`);
+  }
+  console.log(totalScore);
+  return totalScore;
 }
-console.log(scoreboard(inning, 9))
+console.log(scoreboard(getInningScore, inning, 9));
+
+         
 
 
 
